@@ -304,7 +304,7 @@ int count_commands(const char *filename, int *max_undo_out)  //развлеха 
     return count;
 }
 
-void krugovorot_govna(struct field *undo_field, int max_undo, const struct field Field)  //в массиве ундо филд сдвигаем условно из 2 в 1, из 3 во 2. В size - 1 - структуру из параметров функции
+void undo_tuda(struct field *undo_field, int max_undo, const struct field Field)  //в массиве ундо филд сдвигаем условно из 2 в 1, из 3 во 2. В size - 1 - структуру из параметров функции
 {
     int size = max_undo + 2;
     for (int i = 0; i < size - 1; i = i + 1)
@@ -333,7 +333,7 @@ struct field create_empty_field()  //специально плохо запол�
     return empty;
 }
 
-void krugovorot_govna_2(struct field *undo_field, int max_undo, const struct field Field)  //ундо список идет в обратную сторону из-за функции ундо
+void undo_obr(struct field *undo_field, int max_undo, const struct field Field)  //ундо список идет в обратную сторону из-за функции ундо
 {
     int size = max_undo + 2;
     for (int i = size - 2; i > -1; i = i - 1) {
