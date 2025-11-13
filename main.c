@@ -9,7 +9,7 @@
 
 
 //ПРОГРАММА ЗАПУСКАЕТСЯ В ТЕРМИНАЛЕ минимально что ввести в него надо:  cmake-build-debug\untitled.exe input.txt output.txt
-//так же есть еще 3 настраиваемых параметра согласно данной лабораторной
+////параметры задаются в любом порядке кроме инпута и оутпута
 
 struct kmp {                                                                //удобные направления
     int re;                                                                 //горизонталь
@@ -31,7 +31,7 @@ struct field {
 
 int main(int argc, char *argv[])
 {
-    if (argc < 3) {                                                         //если меньше трех аргументов cmake-build-debug\untitled.exe input.txt output.txt - бан на сервере за читы
+    if (argc < 3) {                                                         //если меньше трех аргументов cmake-build-debug\untitled.exe input.txt output.txt - бан на сервере за читы и неуважение администрации
         err(0);
     }
 
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     for (int i = 3; i < argc; i++)
     {
-        if (strcmp(argv[i], "interval") == 0 && i + 1 < argc)
+        if (strcmp(argv[i], "interval") == 0 && i + 1 < argc)                //читаем аргументы которые ввели вы
         {
             interval = get_number(argv[i + 1], 0);                 //задержка
             i++;
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
         {
             no_save = 1;                                                     //не сохраняем в файл
         }
-    }                                                                        //читаем аргументы которые ввели вы
+    }
 
     int max_undo = 0;                                                        //максимальное количество подряд идущих ундо
     int all_ne_komm_line_number = count_commands(input_file, &max_undo) - 1; //колво всех строк которые не комментарии минус (-1 потому что опытным путем)
@@ -73,25 +73,25 @@ int main(int argc, char *argv[])
 
     FILE *file = fopen(input_file, "r");                        //открыт файл в режиме чтения
     int line_number = 1;                                                      //номер строки с командой
-    int line_komm = 0;                                                        //номер строки с коммом
+    int line_komm = 0;                                                        //кол-во строк с коммом
     char line[MAX_LINE_LENGTH];                                               //буфер под парсинг
 
-    struct field Field = create_empty_field();                                //ура создали поле
+    struct field Field = create_empty_field();                                //ура создали поле, пока что пустое
 
-    int size_k = 0;                                                          //три счетчика
+    int size_k = 0;                                                           //три счетчика для особо одаренных как я
     int start_k = 0;
     int osn_k = 0;
-    int a1 = 0, a2 = 0, a3 = 0, a4 = 0; //числа из сайз и старт
+    int a1 = 0, a2 = 0, a3 = 0, a4 = 0;                                       //числа из сайз и старт
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        if (line[0] == '/' && line[1] == '/') //проеврка комма, если она здесь, то коммы могут быть любой длины
+        if (line[0] == '/' && line[1] == '/')                                 //проверка комма, если она здесь, то коммы могут быть любой длины
         {
             line_komm++;
             continue;
         }
 
-        if (strchr(line, '\n') == NULL)                      //если в лайн нету символа перехода на след строку, проверяем, не конец ли файла это, если нет - строка слишком длинная для нашего буфера
+        if (strchr(line, '\n') == NULL)                                   //если в лайн нету символа перехода на след строку, проверяем, не конец ли файла это, если нет - строка слишком длинная для нашего буфера
         {
             int c = fgetc(file);
             if (c != EOF)
@@ -102,18 +102,18 @@ int main(int argc, char *argv[])
         }
 
         char words[50][51] = {0};
-        parse_line(line, words, 50); //парсинг урар
+        parse_line(line, words, 50);                                  //парсинг урар
 
-        if (line[0] == '\n' || line[0] == '\r')  //у меня пустая строка = бан, даже если после нее не следуют команды
+        if (line[0] == '\n' || line[0] == '\r')                                //у меня пустая строка = бан, даже если после нее не следуют команды
         {
             err(line_number + line_komm);
         }
 
-        if (strcmp(words[0], "SIZE") == 0) //проверка на слово
+        if (strcmp(words[0], "SIZE") == 0)                                     //проверка на слово сайз
         {
-            if (size_k == 1) //если оно уже было
+            if (size_k == 1)                                                   //если оно уже было
             {
-                err(line_number + line_komm); //строчка файла
+                err(line_number + line_komm);                                //строчка файла
             }
             a1 = strtol(words[1], NULL, 10);
             a2 = strtol(words[2], NULL, 10);
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
             {
                 err(line_number + line_komm);
             }
-            size_k = 1; //как раз поменяли счетчик
+            size_k = 1;                                                        //как раз поменяли счетчик
             line_number++;
             continue;
         }
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        if (size_k == 1 && start_k == 1 && osn_k == 0)  //инициадизация структуры
+        if (size_k == 1 && start_k == 1 && osn_k == 0)                            //заполнение структуры поля
         {
             osn_k = 1;
             Field.width = a1;
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
                 {
                     if (i < a1 && j < a2)
                     {
-                        Field.obj[i][j].color = '0';  //нулевой цвет
+                        Field.obj[i][j].color = '0';                               //нулевой цвет
                         Field.obj[i][j].object = '_';
                     }
                     if (i >= a1 || j >= a2)
@@ -193,14 +193,14 @@ int main(int argc, char *argv[])
         if (osn_k == 1) //основное происходящее тут
         {
             Field = komanda(Field, words, line_number + line_komm); //выбор команды
-            if (Field.width != -100 && max_undo != 0) //-100 сделано для ундо, не обессудьте, я делал лабу за пару дней подряд....
+            if (Field.width != -100 && max_undo != 0) //-100 сделано для ундо
             {
-                krugovorot_govna(undo_field, max_undo, Field); //пожалуйста не снижайте баллы мне честно уже лень переименовывать, до дд 1:30 часа, а я не спал, и мне на пары
+                undo_tuda(undo_field, max_undo, Field);
             }
             if (Field.width == -100 && max_undo != 0) //если поменять порядок ифов, все будет очень плохо
             {
                 Field = undo_field[max_undo];
-                krugovorot_govna_2(undo_field, max_undo, Field);
+                undo_obr(undo_field, max_undo, Field);
 
             }
             if (no_display == 0)  //если разрешено печатать
@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
         line_number = line_number + 1;
     }
 
-    if (!no_save) {
+    if (no_save == 0) {
         FILE *out = fopen(output_file, "w"); //открыли в режиме записи
 
         if (!out)
@@ -256,5 +256,5 @@ int main(int argc, char *argv[])
         fclose(out);
     }
     fclose(file);
-    return 0;           //я бы с удовольствием освободил память от динамического массива но я хочу спать
-}
+    free(undo_field);
+    return 0;
