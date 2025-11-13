@@ -12,9 +12,9 @@ struct field komanda(struct field Field, char line[][51], int line_number);
 int get_number(const char *line, int line_number);
 void print_field(struct field Field);
 int count_commands(const char *filename, int *max_undo_out);
-void krugovorot_govna(struct field *undo_field, int max_undo, struct field new_state);
+void undo_tuda(struct field *undo_field, int max_undo, struct field new_state);
 struct field create_empty_field();
-void krugovorot_govna_2(struct field *undo_field, int max_undo, struct field new_state);
+void undo_obr(struct field *undo_field, int max_undo, struct field new_state);
 struct field rav(struct field Field, struct field Field_new);
 
 
